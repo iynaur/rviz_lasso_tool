@@ -35,7 +35,7 @@ public:
     {
       throw std::runtime_error("Unable to load pcd file: " + pcd_path);
     }
-    cloud_->header.frame_id = "base_link";
+    cloud_->header.frame_id = "map"; //or "base_link", according to rviz settings.
     active_map_.resize(cloud_->size(), false);
 
     colorAndPublish();
