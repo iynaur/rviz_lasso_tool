@@ -107,11 +107,12 @@ Visualization Manager:
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point
+    - Class: rviz_lasso_tool/RvizLassoTool
   Value: true
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.7850098609924316
+      Distance: 17.073205947875977
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -126,10 +127,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9953978061676025
+      Pitch: 0.5147972702980042
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.9153978824615479
+      Yaw: 4.943583965301514
     Saved: ~
 Window Geometry:
   Displays:
