@@ -49,6 +49,7 @@ inline boost::shared_ptr<std::vector<int>> inside(const std::vector<std::pair<fl
     const auto& pt = cloud[i];
     Eigen::Vector4d p_e (pt.x, pt.y, pt.z, 1);
     Eigen::Vector4d p = projection * cam_pose_inv * p_e;
+    if (p(2) < 0) continue;
     p /= p(2);
     if (pnpoly2(verts, p(0), p(1)))
     {
