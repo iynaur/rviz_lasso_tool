@@ -7,6 +7,8 @@ A collection of tools for making complex "selections" in RVIZ with a lasso tool 
 Try the demo:
 ```
 rosrun rviz_lasso_tool rviz_lasso_tool_demo _pcd_path:=PATH_TO_YOUR_PCD_FILE
+or if that encountered the error “Found the following, but they’re either not files or not executable”, run below instead.
+./rviz_lasso_tool_demo _pcd_path:=/home/ruan/22.24.pcd
 ```
 
 And in another thread, run Rviz, load the rviz lasso tool and go to town. Press control to add to the current selection and shift to remove from it.
