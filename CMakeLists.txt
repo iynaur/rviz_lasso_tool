@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rviz_lasso_tool)
 
+if (EXISTS "/opt/ros/kinetic")
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /opt/ros/kinetic)
+elseif(EXISTS "/opt/ros/melodic")
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /opt/ros/melodic)
+endif()
 
 # Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
