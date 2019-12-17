@@ -99,7 +99,7 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
   {
     publishSelection(event);
     current_selection_.clear();
-    return rviz::Tool::Finished;
+    return rviz::Tool::Render;
   }
 
   return rviz::Tool::Render;
@@ -111,6 +111,7 @@ int rviz_lasso_tool::RvizLassoTool::processKeyEvent(QKeyEvent *event, rviz::Rend
   key.key = event->key();
 
   key_pub_.publish(key);
+  return rviz::Tool::Finished;//no effect inside processKeyEvent, only for c++ grammar
 }
 
 static std::vector<geometry_msgs::Point32> toMsg(const std::vector<std::pair<float,float>>& verts)
