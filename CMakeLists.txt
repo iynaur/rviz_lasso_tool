@@ -43,8 +43,17 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${pcl_INCLUDE_DIRS}
+#  ${pcl_INCLUDE_DIRS}
 )
+
+find_package (PCL 1.8 REQUIRED)
+include_directories (${PCL_INCLUDE_DIRS})
+link_directories    (${PCL_LIBRARY_DIRS})
+add_definitions     (${PCL_DEFINITIONS})
+
+include_directories(
+#  /usr/local/include/pcl-1.8
+  )
 
 # QT Stuff
 add_definitions(-DQT_NO_KEYWORDS)
@@ -86,6 +95,7 @@ target_link_libraries(${PROJECT_NAME}
 # Demonstration Node that Handles Input from the Plugin
 add_executable(rviz_lasso_tool_demo
   src/demo_node.cpp
+  src/pcd_io_1.8.cpp
   src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
 )
 

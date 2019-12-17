@@ -2,10 +2,11 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
-#include <pcl/io/pcd_io.h>
+#include "rviz_lasso_tool/pcd_io_1.8.h"
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/extract_indices.h>
+#include <pcl/visualization/pcl_visualizer.h>
 #include <pcl_ros/point_cloud.h>
 
 #include <rviz_lasso_tool/ramer_douglas_peucker_simplification.h>
@@ -34,9 +35,15 @@ public:
 
     cloud_pub_ = nh.advertise<pcl::PointCloud<pcl::PointXYZRGB>>("color_cloud", 1, true);
 
-    if (pcl::io::loadPCDFile(pcd_path, *cloud_) == -1)
+    if (pcl::io::loadPCDFile1_8(pcd_path, *cloud_) == -1)
     {
       throw std::runtime_error("Unable to load pcd file: " + pcd_path);
+    }
+    pcl::visualization::PCLVisualizer view;
+    view.addPointCloud(cloud_);
+    while(!view.wasStopped())
+    {
+      view.spinOnce();
     }
     cloud_->header.frame_id = "map"; //or "base_link", according to rviz settings.
     active_map_.resize(cloud_->size(), false);
@@ -122,6 +129,8 @@ public:
 
   void colorAndPublish()
   {
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr backup(new pcl::PointCloud<pcl::PointXYZRGB>);
+    *backup = *cloud_;
     for (std::size_t i = 0; i < active_map_.size(); ++i)
     {
       if (active_map_[i])
@@ -130,15 +139,10 @@ public:
         (*cloud_)[i].g = ACTIVE_G;
         (*cloud_)[i].b = ACTIVE_B;
       }
-      else
-      {
-        (*cloud_)[i].r = INACTIVE_R;
-        (*cloud_)[i].g = INACTIVE_G;
-        (*cloud_)[i].b = INACTIVE_B;
-      }
     }
     ROS_INFO_STREAM("publish");
     cloud_pub_.publish(*cloud_);
+    cloud_.swap(backup);
   }
 
 private:
