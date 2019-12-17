@@ -26,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   UserSelection.msg
+  KeyBoard.msg
 )
 
 generate_messages(

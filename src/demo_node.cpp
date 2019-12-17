@@ -11,6 +11,7 @@
 #include <rviz_lasso_tool/ramer_douglas_peucker_simplification.h>
 #include <rviz_lasso_tool/selection_testing.h>
 #include <rviz_lasso_tool/UserSelection.h>
+#include <rviz_lasso_tool/KeyBoard.h>
 
 class UserSelectionManager
 {
@@ -28,6 +29,8 @@ public:
   {
     selection_sub_ = nh.subscribe<rviz_lasso_tool::UserSelection>("user_selection", 1,
                                                                   &UserSelectionManager::onUserSelection, this);
+    key_sub_ = nh.subscribe<rviz_lasso_tool::KeyBoard>("keyboard", 1,
+                                                                  &UserSelectionManager::onKeyBoard, this);
 
     cloud_pub_ = nh.advertise<pcl::PointCloud<pcl::PointXYZRGB>>("color_cloud", 1, true);
 
@@ -39,6 +42,28 @@ public:
     active_map_.resize(cloud_->size(), false);
 
     colorAndPublish();
+  }
+
+  void onKeyBoard(const rviz_lasso_tool::KeyBoardConstPtr& msg)
+  {
+    if (msg->key == 0x01000007) //Qt::Key_Delete
+    {
+      pcl::IndicesPtr rm(new std::vector<int>);
+      for (std::size_t i = 0; i < active_map_.size(); ++i)
+      {
+        if (active_map_[i])
+        {
+          rm->push_back(i);
+        }
+      }
+      pcl::ExtractIndices<pcl::PointXYZRGB> ex;
+      ex.setInputCloud(cloud_);
+      ex.setIndices(rm);
+      ex.setNegative(true);
+      ex.filter(*cloud_);
+      active_map_ = std::vector<bool>(cloud_->size(), false);
+      colorAndPublish();
+    }
   }
 
   void onUserSelection(const rviz_lasso_tool::UserSelectionConstPtr& msg)
@@ -111,7 +136,7 @@ public:
   }
 
 private:
-  ros::Subscriber selection_sub_;
+  ros::Subscriber selection_sub_, key_sub_;
   ros::Publisher cloud_pub_;
 
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_;

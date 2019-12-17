@@ -9,6 +9,7 @@
 #include <ros/node_handle.h>
 
 #include <rviz_lasso_tool/UserSelection.h>
+#include <rviz_lasso_tool/KeyBoard.h>
 
 static Eigen::Affine3d toEigen(const Ogre::Matrix4& m)
 {
@@ -50,7 +51,8 @@ void rviz_lasso_tool::RvizLassoTool::onInitialize()
   this->shortcut_key_ = 'l';
 
   ros::NodeHandle nh;
-  pub_ = nh.advertise<rviz_lasso_tool::UserSelection>("user_selection", 1, false);
+  mouse_pub_ = nh.advertise<rviz_lasso_tool::UserSelection>("user_selection", 1, false);
+  key_pub_ = nh.advertise<rviz_lasso_tool::KeyBoard>("keyboard", 1, false);
 }
 
 void rviz_lasso_tool::RvizLassoTool::activate()
@@ -101,6 +103,14 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
   }
 
   return rviz::Tool::Render;
+}
+
+int rviz_lasso_tool::RvizLassoTool::processKeyEvent(QKeyEvent *event, rviz::RenderPanel *panel)
+{
+  rviz_lasso_tool::KeyBoard key;
+  key.key = event->key();
+
+  key_pub_.publish(key);
 }
 
 static std::vector<geometry_msgs::Point32> toMsg(const std::vector<std::pair<float,float>>& verts)
@@ -197,7 +207,7 @@ void rviz_lasso_tool::RvizLassoTool::publishSelection(const rviz::ViewportMouseE
   selection.control = static_cast<bool>(event.modifiers & Qt::ControlModifier);
   selection.alt = static_cast<bool>(event.modifiers & Qt::AltModifier);
 
-  pub_.publish(selection);
+  mouse_pub_.publish(selection);
 }
 
 PLUGINLIB_EXPORT_CLASS(rviz_lasso_tool::RvizLassoTool, rviz::Tool)

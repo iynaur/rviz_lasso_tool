@@ -8,6 +8,8 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <Eigen/Dense>
 
+class rviz::RenderPanel;
+
 namespace rviz_lasso_tool
 {
 
@@ -24,6 +26,8 @@ public:
 
   virtual int processMouseEvent(rviz::ViewportMouseEvent& event) override;
 
+  virtual int processKeyEvent( QKeyEvent* event, rviz::RenderPanel* panel ) override;
+
   void publishSelection(const rviz::ViewportMouseEvent& event);
 
 private:
@@ -31,7 +35,7 @@ private:
   std::vector<std::pair<float,float>> current_selection_;
   int last_x_;
   int last_y_;
-  ros::Publisher pub_;
+  ros::Publisher mouse_pub_, key_pub_;
 };
 
 }
