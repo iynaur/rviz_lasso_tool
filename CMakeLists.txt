@@ -3,6 +3,8 @@ project(rviz_lasso_tool)
 
 if (EXISTS "/opt/ros/kinetic")
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /opt/ros/kinetic)
+set(CMAKE_INSTALL_PREFIX /opt/ros/kinetic)
+
 elseif(EXISTS "/opt/ros/melodic")
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /opt/ros/melodic)
 endif()
@@ -106,3 +108,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE
 )
+
+install(FILES
+  plugin_description.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
