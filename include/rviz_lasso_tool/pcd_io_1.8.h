@@ -45,6 +45,24 @@
 
 namespace pcl
 {
+
+template<>
+struct FieldMatches<pcl::PointXYZRGB, fields::rgb>
+{
+  bool operator() (const pcl::PCLPointField& field)
+  {
+    if (field.name == "rgba")
+    {
+      return (field.datatype == pcl::PCLPointField::UINT32 &&
+              field.count == 1);
+    }
+    else if (field.name == "rgb")
+    {
+      return (
+              field.count == 1);
+    }
+  }
+};
   /** \brief Point Cloud Data (PCD) file format reader.
     * \author Radu B. Rusu
     * \ingroup io
