@@ -103,6 +103,7 @@ add_dependencies(rviz_lasso_tool_demo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 
 target_link_libraries(rviz_lasso_tool_demo
   ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
 #  rviz_selection_utils
 )
 
