@@ -10,6 +10,7 @@
 
 #include <rviz_lasso_tool/UserSelection.h>
 #include <rviz_lasso_tool/KeyBoard.h>
+#include <QMenu>
 
 static Eigen::Affine3d toEigen(const Ogre::Matrix4& m)
 {
@@ -102,6 +103,20 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
     return rviz::Tool::Render;
   }
 
+  if (event.rightUp())
+  {
+    QMenu menu;
+    QAction *actsave = menu.addAction(QString("Save"));
+    connect(actsave, &QAction::triggered, [=]()//to avoid build in "Select Tool" short cut
+    {
+      rviz_lasso_tool::KeyBoard key;
+      key.key = Qt::Key_S;
+      key.desc = "s";
+      key_pub_.publish(key);
+    });
+
+    menu.exec(QCursor::pos());
+  }
   return rviz::Tool::Render;
 }
 
@@ -109,7 +124,7 @@ int rviz_lasso_tool::RvizLassoTool::processKeyEvent(QKeyEvent *event, rviz::Rend
 {
   rviz_lasso_tool::KeyBoard key;
   key.key = event->key();
-
+  key.desc = event->text().toStdString();
   key_pub_.publish(key);
   return rviz::Tool::Finished;//no effect inside processKeyEvent, only for c++ grammar
 }

@@ -46,6 +46,8 @@ public:
 
   void onKeyBoard(const rviz_lasso_tool::KeyBoardConstPtr& msg)
   {
+    std::cerr<<"key: "<<msg->key<<std::endl;
+    std::cerr<<"text: "<<msg->desc<<std::endl;
     if (msg->key == 0x01000007) //Qt::Key_Delete
     {
       pcl::IndicesPtr rm(new std::vector<int>);
@@ -63,6 +65,10 @@ public:
       ex.filter(*cloud_);
       active_map_ = std::vector<bool>(cloud_->size(), false);
       colorAndPublish();
+    }
+    else if (msg->desc == "s")
+    {
+      if (!cloud_->empty()) pcl::io::savePCDFile("output.pcd", *cloud_);
     }
   }
 
