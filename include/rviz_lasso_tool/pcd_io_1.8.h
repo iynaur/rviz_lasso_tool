@@ -41,7 +41,7 @@
 #define PCL_IO_PCD_IO_H_
 
 #include <pcl/point_cloud.h>
-#include "file_io_1.8.h"
+#include <pcl/io/file_io.h>
 
 namespace pcl
 {
