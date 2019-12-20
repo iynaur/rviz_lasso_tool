@@ -2,7 +2,7 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
-#include "rviz_lasso_tool/pcd_io_1.8.h"
+#include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/extract_indices.h>
@@ -35,7 +35,7 @@ public:
 
     cloud_pub_ = nh.advertise<pcl::PointCloud<pcl::PointXYZRGB>>("color_cloud", 1, true);
 
-    if (pcl::io::loadPCDFile1_8(pcd_path, *cloud_) == -1)
+    if (pcl::io::loadPCDFile(pcd_path, *cloud_) == -1)
     {
       throw std::runtime_error("Unable to load pcd file: " + pcd_path);
     }

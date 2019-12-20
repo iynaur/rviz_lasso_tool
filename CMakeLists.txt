@@ -40,20 +40,12 @@ catkin_package(
   CATKIN_DEPENDS rviz message_runtime pcl_ros eigen_conversions geometry_msgs
 )
 
+find_package(PCL 1.8 REQUIRED)
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
-#  ${pcl_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS} #pcl 1.8, must ahead of pcl 1.7 in catkin_INCLUDE_DIRS
+  ${catkin_INCLUDE_DIRS} #contain pcl 1.7
 )
-
-find_package (PCL 1.8 REQUIRED)
-include_directories (${PCL_INCLUDE_DIRS})
-link_directories    (${PCL_LIBRARY_DIRS})
-add_definitions     (${PCL_DEFINITIONS})
-
-include_directories(
-#  /usr/local/include/pcl-1.8
-  )
 
 # QT Stuff
 add_definitions(-DQT_NO_KEYWORDS)
@@ -95,7 +87,6 @@ target_link_libraries(${PROJECT_NAME}
 # Demonstration Node that Handles Input from the Plugin
 add_executable(rviz_lasso_tool_demo
   src/demo_node.cpp
-  src/pcd_io_1.8.cpp
   src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
 )
 
@@ -103,7 +94,6 @@ add_dependencies(rviz_lasso_tool_demo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 
 target_link_libraries(rviz_lasso_tool_demo
   ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
 #  rviz_selection_utils
 )
 
